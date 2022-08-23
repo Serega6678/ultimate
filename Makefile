@@ -5,7 +5,7 @@ help:
 	echo "Please provide a command"
 
 run:
-	cd src/middleware && CLASSIFICATION_BACKEND_URL="https://localhost:8080/predictions/resnet-18" uvicorn main:app --reload --port 8079
+	cd src/middleware && CLASSIFICATION_BACKEND_URL="https://localhost:8080/predictions/resnet-18" gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8079 --workers 4
 
 archive-model:
 	source venv_torchserve/bin/activate
