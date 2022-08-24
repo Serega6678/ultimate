@@ -5,11 +5,9 @@ services:
       dockerfile: dockerfiles/DockerfileMiddleware
       context: .
     restart: always
-    ports:
-      - 8079:8079
     env_file: .env
     volumes:
-      - ./data:/data
+      - ./data/data:/data
     depends_on:
       - serving
       - rabbitmq
@@ -21,9 +19,11 @@ services:
       - ./src/serving/deployment_data:/home/model-server/deployment_data
   nginx:
     image: nginx
+    restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./data:/data:ro
+      - ./data/data:/data:ro
+      - ./data/reports:/reports:ro
     command: nginx -g 'daemon off';
     ports:
       - 8078:8078
@@ -32,3 +32,26 @@ services:
       - middleware
   rabbitmq:
     image: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+  postgres:
+    image: postgres:13.4-alpine
+    restart: always
+    env_file: .env
+    volumes:
+      - ./db_utils/db_data:/var/lib/postgresql/data
+      - ./db_utils/db_scripts/:/docker-entrypoint-initdb.d
+    ports:
+      - 5433:5432
+  statistics_handler:
+    build:
+      dockerfile: dockerfiles/DockerfileStatisticsHandler
+      context: .
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data/reports:/reports
+    depends_on:
+      - middleware
+      - rabbitmq

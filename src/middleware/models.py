@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from pydantic import BaseModel, Field, validator
-import typing as tp
 
 
 class ClassificationSampleInfo(BaseModel):

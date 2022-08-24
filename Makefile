@@ -5,7 +5,7 @@ help:
 	echo "Please provide a command"
 
 run:
-	cd src/middleware && CLASSIFICATION_BACKEND_URL="https://localhost:8080/predictions/resnet-18" gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8079 --workers 4
+	cd src/middleware && QUEUE_ADDRESS="localhost" CLASSIFICATION_BACKEND_URL="https://localhost:8080/predictions/resnet-18" gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8079 --workers 4
 
 archive-model:
 	source venv_torchserve/bin/activate
@@ -19,3 +19,6 @@ inspect-served-models:
 
 inspect-served-classifier:
 	curl --insecure https://localhost:8081/models/resnet-18
+
+run_docker_compose:
+	docker-compose --env-file .env up
