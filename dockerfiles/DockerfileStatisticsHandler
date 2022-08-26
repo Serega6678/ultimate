@@ -13,5 +13,6 @@ COPY src/statistics_handler/ .
 ADD src/queue_utils/ /app/queue_utils
 ADD src/database/ /app/database
 COPY dockerfiles/wait-for-it.sh .
+COPY dockerfiles/statistics_handler_run.sh .
 
-CMD ["/app/wait-for-it.sh", "rabbit:5672", "--", "python", "main.py"]
+CMD ["/app/statistics_handler_run.sh"]
