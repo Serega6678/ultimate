@@ -1,0 +1,63 @@
+version: "3"
+services:
+  middleware:
+    build:
+      dockerfile: dockerfiles/DockerfileMiddleware
+      context: .
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data/data:/data
+    depends_on:
+      - serving
+      - rabbitmq
+      - statistics_handler
+  serving:
+    image: pytorch/torchserve:0.6.0-cpu
+    command: torchserve --start --ts-config /home/model-server/deployment_data/config.properties --models resnet-18=resnet-18.mar
+    restart: always
+    volumes:
+      - ./src/serving/deployment_data:/home/model-server/deployment_data
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./data/data:/data:ro
+      - ./data/reports:/reports:ro
+    command: nginx -g 'daemon off;';
+    ports:
+      - 8078:8078
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+  postgres:
+    image: postgres:13.4-alpine
+    restart: always
+    env_file: .env
+    volumes:
+      - ./db_utils/db_data:/var/lib/postgresql/data
+      - ./db_utils/db_scripts/:/docker-entrypoint-initdb.d
+    ports:
+      - 5433:5432
+  statistics_handler:
+    build:
+      dockerfile: dockerfiles/DockerfileStatisticsHandler
+      context: .
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data/reports:/reports
+    depends_on:
+      - rabbitmq
+      - postgres
+  ui:
+    build:
+      dockerfile: dockerfiles/DockerfileUI
+      context: .
+    restart: always
+    env_file: .env
+    depends_on:
+      - nginx
+    ports:
+      - 8501:8501

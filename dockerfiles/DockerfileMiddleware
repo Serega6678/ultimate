@@ -1,0 +1,16 @@
+FROM python:3.8-slim-buster
+
+WORKDIR /app
+
+COPY requirements/middleware_requirements.txt requirements.txt
+
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc g++
+
+RUN pip3 install -r requirements.txt
+
+COPY src/middleware/ .
+ADD src/queue_utils/ /app/queue_utils
+COPY dockerfiles/wait-for-it.sh .
+
+CMD ["/app/wait-for-it.sh", "serving:8080", "--", "/app/wait-for-it.sh", "rabbit:5672", "--", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:8079", "--workers", "4"]

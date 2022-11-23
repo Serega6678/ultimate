@@ -1,0 +1,18 @@
+FROM python:3.8-slim-buster
+
+WORKDIR /app
+
+COPY requirements/statistics_handler_requirements.txt requirements.txt
+
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc
+
+RUN pip3 install -r requirements.txt
+
+COPY src/statistics_handler/ .
+ADD src/queue_utils/ /app/queue_utils
+ADD src/database/ /app/database
+COPY dockerfiles/wait-for-it.sh .
+COPY dockerfiles/statistics_handler_run.sh .
+
+CMD ["/app/statistics_handler_run.sh"]
