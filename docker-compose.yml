@@ -11,6 +11,7 @@ services:
     depends_on:
       - serving
       - rabbitmq
+      - statistics_handler
   serving:
     image: pytorch/torchserve:0.6.0-cpu
     command: torchserve --start --ts-config /home/model-server/deployment_data/config.properties --models resnet-18=resnet-18.mar
@@ -27,14 +28,9 @@ services:
     command: nginx -g 'daemon off;';
     ports:
       - 8078:8078
-    depends_on:
-      - serving
-      - middleware
   rabbitmq:
     image: rabbitmq
     restart: always
-    ports:
-      - 5672:5672
   postgres:
     image: postgres:13.4-alpine
     restart: always
@@ -53,6 +49,15 @@ services:
     volumes:
       - ./data/reports:/reports
     depends_on:
-      - middleware
       - rabbitmq
       - postgres
+  ui:
+    build:
+      dockerfile: dockerfiles/DockerfileUI
+      context: .
+    restart: always
+    env_file: .env
+    depends_on:
+      - nginx
+    ports:
+      - 8501:8501
