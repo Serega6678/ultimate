@@ -36,7 +36,9 @@ async def classify_sample(sample_info: ClassificationSampleInfo = Body(...)) -> 
 def get_report(
         test_group_id: str = Query(..., title="test group id", example="initial_dataset", description="test group id")
 ) -> str:
-    path_to_save = "/reports/" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=16)) + ".json"
+    path_to_save = "/reports/" + ''.join(
+        random.choices(string.ascii_uppercase + string.digits, k=16)
+    ) + "_" + test_group_id + ".json"
     post_to_queue_report(test_group_id, path_to_save)
     return path_to_save
 
