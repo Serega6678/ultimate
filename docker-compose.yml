@@ -36,8 +36,8 @@ services:
     restart: always
     env_file: .env
     volumes:
-      - ./db_utils/db_data:/var/lib/postgresql/data
-      - ./db_utils/db_scripts/:/docker-entrypoint-initdb.d
+      - postgresql-data:/var/lib/postgresql/data
+      - ./db_utils/:/docker-entrypoint-initdb.d
     ports:
       - 5433:5432
   statistics_handler:
@@ -61,3 +61,6 @@ services:
       - nginx
     ports:
       - 8501:8501
+volumes:
+  postgresql-data:
+    driver: local
