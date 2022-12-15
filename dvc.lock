@@ -7,8 +7,8 @@ stages:
       md5: b9e85c3e3f7a6a0cc0a43cf803d90a3a
       size: 72
     - path: src/data_transformations/increment_values.py
-      md5: 45c1962b35d22f3d9cc0c9085dd8abb9
-      size: 234
+      md5: fac0d98153907b1b17def58b4d2e07eb
+      size: 222
     outs:
     - path: data/dvc_practice_data/transformed.csv
       md5: 18835246c3aebf98536e096ef59e4960
