@@ -3,6 +3,7 @@
 ## Info
 
 This is a pet project where I've used:
+* Auto-migration (Alembic)
 * Docker-compose
 * DVC
 * FastAPI & pydantic
