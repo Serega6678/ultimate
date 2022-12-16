@@ -1,0 +1,9 @@
+stages:
+
+    increment_values:
+        cmd: python src/data_transformations/increment_values.py
+        deps:
+          - src/data_transformations/increment_values.py
+          - data/dvc_practice_data/initial.csv
+        outs:
+          - data/dvc_practice_data/transformed.csv
