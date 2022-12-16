@@ -18,6 +18,8 @@ services:
     restart: always
     volumes:
       - ./src/serving/deployment_data:/home/model-server/deployment_data
+    ports:
+      - 8081:8081
   nginx:
     image: nginx
     restart: always
@@ -61,6 +63,43 @@ services:
       - nginx
     ports:
       - 8501:8501
+  grafana:
+    image: grafana/grafana-oss:latest
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    container_name: cadvisor
+    restart: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
 volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
   postgresql-data:
     driver: local
