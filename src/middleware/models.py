@@ -5,11 +5,12 @@ from pydantic import BaseModel, Field, validator
 
 class ClassificationSampleInfo(BaseModel):
     test_group_id: str = Field(
-        ..., description="Id of the test group of the sample", title="test group id", example="initial_dataset"
+        ...,
+        description="Id of the test group of the sample",
+        title="test group id",
+        example="initial_dataset",
     )
-    id: int = Field(
-        ..., description="Id of the data sample", title="id", example=0
-    )
+    id: int = Field(..., description="Id of the data sample", title="id", example=0)
     image_name: str = Field(
         ..., description="Name of the image in the system", title="image name", example="kitten.jpg"
     )
@@ -33,5 +34,8 @@ class ClassificationSampleInfo(BaseModel):
 
 class ClassificationStatus(BaseModel):
     correctly_classified: bool = Field(
-        ..., description="True if the sample was correctly classified", title="correctly classified", example=True
+        ...,
+        description="True if the sample was correctly classified",
+        title="correctly classified",
+        example=True,
     )

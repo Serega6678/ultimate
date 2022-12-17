@@ -1,5 +1,10 @@
-from .models import RecordSampleMessageTaskTypeStatisticsHandler, TaskTypeStatisticsHandlerEnum, BuildReportStatisticsHandler, TaskTypeStatisticsHandler
-from .queue import EXCHANGE_NAME, CLASSIFICATION_RECORDER_QUEUE_NAME, channel
+from .models import (
+    BuildReportStatisticsHandler,
+    RecordSampleMessageTaskTypeStatisticsHandler,
+    TaskTypeStatisticsHandler,
+    TaskTypeStatisticsHandlerEnum,
+)
+from .queue import CLASSIFICATION_RECORDER_QUEUE_NAME, EXCHANGE_NAME, channel
 
 __all__ = [
     "EXCHANGE_NAME",
@@ -8,5 +13,5 @@ __all__ = [
     "TaskTypeStatisticsHandler",
     "BuildReportStatisticsHandler",
     "channel",
-    "RecordSampleMessageTaskTypeStatisticsHandler"
+    "RecordSampleMessageTaskTypeStatisticsHandler",
 ]
