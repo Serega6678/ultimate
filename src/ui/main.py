@@ -6,11 +6,10 @@ import typing as tp
 
 import matplotlib.pyplot as plt
 import numpy as np
-import requests
-from requests.adapters import HTTPAdapter, Retry
-
 import pandas as pd
+import requests
 import streamlit as st
+from requests.adapters import HTTPAdapter, Retry
 
 NGINX_URL = os.getenv("NGINX_URL")
 assert NGINX_URL is not None
@@ -83,7 +82,7 @@ def get_recent_report_names(session: requests.Session, top_k: int = 3) -> tp.Opt
 
 
 def get_report_st(dataset_name, session):
-    st.header(f"Report for dataset \"{dataset_name}\":")
+    st.header(f'Report for dataset "{dataset_name}":')
     report_name = demand_report(session, dataset_name)
     if report_name is not None:
         df = get_report_by_name(session, report_name)
@@ -103,7 +102,9 @@ def get_recent_reports_st(session):
         df = pd.concat(dfs)
         st.write(df)
         df = df.reset_index()
-        df["index"] = df["index"].apply(lambda x: "_".join(map(lambda x: x[:4] + "...", x.split("_"))))
+        df["index"] = df["index"].apply(
+            lambda x: "_".join(map(lambda x: x[:4] + "...", x.split("_")))
+        )
         df = df.rename(columns={"index": "report name"})
 
         fig, axs = plt.subplots(1, 3, figsize=(12, 6))

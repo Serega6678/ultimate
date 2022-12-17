@@ -13,9 +13,7 @@ class ClassificationInfo(Base):
     target_class_id = Column(Integer, nullable=False)
     predicted_class = Column(Integer, nullable=False)
 
-    __table_args__ = {
-        "schema": "statistics_calculation"
-    }
+    __table_args__ = {"schema": "statistics_calculation"}
 
     @hybrid_property
     def correctly_classified(self):
